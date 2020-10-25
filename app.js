@@ -22,8 +22,6 @@ const online = io.of('/online')
 //   cookie: false
 // });
 
-var port = process.env.port || 3000;
-
 app.use("/static", express.static(path.join(__dirname , `public`)));
 app.use("/images", express.static(path.join(__dirname , `public`, `images`)));
 
@@ -62,9 +60,7 @@ online.on(`connection`, function(socket){
   }
 })
 
-
-
-
-server.listen(port, ()=>{
+var port = process.env.port || 3000
+server.listen( port, ()=>{
   console.log(`App listenting on port: ${port}`);
 })
