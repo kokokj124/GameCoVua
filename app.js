@@ -63,6 +63,7 @@ online.on(`connection`, function(socket){
 
 
 
-server.listen( process.env.port || 3000, ()=>{
+port = process.env.port || 3000
+server.listen(  port, ()=>{
   console.log(`App listenting on port: ${port}`);
 })
