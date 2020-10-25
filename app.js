@@ -60,7 +60,7 @@ online.on(`connection`, function(socket){
   }
 })
 
-var port = process.port || 3000
+var port = process.port
 server.listen(  port, ()=>{
   console.log(`App listenting on port: ${port}`);
 })
