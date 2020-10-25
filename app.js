@@ -60,7 +60,7 @@ online.on(`connection`, function(socket){
   }
 })
 
-var port = process.env.port
+var port = process.env.PORT
 server.listen(  port, ()=>{
   console.log(`App listenting on port: ${port}`);
 })
