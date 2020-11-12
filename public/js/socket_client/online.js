@@ -1,5 +1,5 @@
-// var socket = io("127.0.0.1:3000/online-home")
-var socket = io("https://vu-nam.herokuapp.com/online-home")
+var socket = io("127.0.0.1:3000/online-home")
+// var socket = io("https://vu-nam.herokuapp.com/online-home")
 
 
 socket.on('server-send-list-rooms',data =>{
@@ -11,13 +11,14 @@ socket.on('server-send-list-rooms',data =>{
                 $('#'+room.name).attr("style", "background-color: coral");
             }
         })
-        if(data.stateRooms == true){
-            window.location.href = "/online/online-rooms?roomName=" + $("#room-name").val()
-        }
     }
     else {
         alert("Phong Da Ton Tai")
     }
+})
+
+socket.on('server-accset-rooms', ()=>{
+    window.location.href = "/online/online-rooms?roomName=" + $("#room-name").val()
 })
 
 $("#online-join-room").click(()=>{

@@ -11,7 +11,8 @@ socket_online_home = (online, arrayRooms) => {
           if (arrayRooms.findIndex(e=>e.name == data) == -1){
             let room = {name:data, permisstion:"admin", size:1}
             arrayRooms.push(room)
-            online.emit('server-send-list-rooms', { arrayRooms: arrayRooms, stateRooms: true });
+            online.emit('server-send-list-rooms', { arrayRooms: arrayRooms});
+            socket.emit('server-accset-rooms')
           }
           else {
             socket.emit('server-send-list-rooms', { arrayRooms: "error" });

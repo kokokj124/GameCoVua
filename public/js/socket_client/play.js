@@ -4,8 +4,8 @@ var game = new Chess()
 var squareToHighlight = null
 var squareClass = 'square-55d63'
 
-var socket = io("https://vu-nam.herokuapp.com/online/online-rooms")
-// var socket = io("127.0.0.1:3000/online/online-rooms")
+// var socket = io("https://vu-nam.herokuapp.com/online/online-rooms")
+var socket = io("127.0.0.1:3000/online/online-rooms")
 
 function removeHighlights(color) {
   $board.find('.' + squareClass)
