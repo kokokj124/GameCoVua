@@ -12,7 +12,7 @@ socket_online_home = (online, arrayRooms) => {
             let room = {name:data, permisstion:"admin", size:1}
             arrayRooms.push(room)
             online.emit('server-send-list-rooms', { arrayRooms: arrayRooms});
-            socket.emit('server-accset-rooms')
+            socket.emit('server-accset-rooms', data)
           }
           else {
             socket.emit('server-send-list-rooms', { arrayRooms: "error" });
@@ -20,6 +20,7 @@ socket_online_home = (online, arrayRooms) => {
         })
 
         socket.on('client-check-rooms',data=>{
+          console.log(data);
           let flag = false
           arrayRooms.forEach(element => {
             if(element.name == data && element.size == 1){

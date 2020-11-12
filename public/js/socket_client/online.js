@@ -6,9 +6,12 @@ socket.on('server-send-list-rooms',data =>{
     if(data.arrayRooms != "error"){
         $("#room").html("")
         data.arrayRooms.forEach(room=>{
-            $("#room").append("<option id="+room.name+">"+room.name+"</option>")
             if(room.size == 2){
+                $("#room").append("<option id="+room.name+" value="+room.name+">"+"<div>" + room.name + "</div>" + "<div> ( Đầy )</div>" + "</option>")
                 $('#'+room.name).attr("style", "background-color: coral");
+            }
+            else{
+                $("#room").append("<option id="+room.name+" value="+room.name+">"+"<div>" + room.name + "</div>" + "<div> ( Còn Trống )</div>" + "</option>")
             }
         })
     }
@@ -18,12 +21,13 @@ socket.on('server-send-list-rooms',data =>{
 })
 
 socket.on('server-accset-rooms', ()=>{
-    window.location.href = "/online/online-rooms?roomName=" + $("#room-name").val()
+    window.location.href = "/online/online-rooms?roomName=" + $("#room").val();
 })
 
 $("#online-join-room").click(()=>{
+    console.log($("#room").val());
     socket.emit('client-check-rooms', $("#room").val())
-    socket.on('server-check-rooms',data=>{
+    socket.on('server-check-rooms', data=>{
         if(data == "error"){
             alert("Phong Da Day")
         }
