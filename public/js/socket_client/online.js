@@ -1,5 +1,5 @@
-var socket = io("127.0.0.1:3000/online-home")
-// var socket = io("https://vu-nam.herokuapp.com/online-home")
+// var socket = io("127.0.0.1:3000/online-home")
+var socket = io("https://vu-nam.herokuapp.com/online-home")
 
 
 socket.on('server-send-list-rooms',data =>{
