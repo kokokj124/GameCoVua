@@ -198,7 +198,7 @@ var makeBestMove = function () {
     removeHighlights('black')
     game.ugly_move(bestMove);
     board.position(game.fen());
-    renderMoveHistory(game.history());
+    // renderMoveHistory(game.history());
     $('#board').find('.square-' + game.history({ verbose: true })[historyCount]['from']).addClass('highlight-black')
     $('#board').find('.square-' + game.history({ verbose: true })[historyCount]['to']).addClass('highlight-black')
     historyCount += 2
@@ -233,15 +233,15 @@ var getBestMove = function (game) {
     return bestMove;
 };
 
-var renderMoveHistory = function (moves) {
-    var historyElement = $('#move-history').empty();
-    historyElement.empty();
-    for (var i = 0; i < moves.length; i = i + 2) {
-        historyElement.append('<span>' + moves[i] + ' ' + ( moves[i + 1] ? moves[i + 1] : ' ') + '</span><br>')
-    }
-    historyElement.scrollTop(historyElement[0].scrollHeight);
+// var renderMoveHistory = function (moves) {
+//     var historyElement = $('#move-history').empty();
+//     historyElement.empty();
+//     for (var i = 0; i < moves.length; i = i + 2) {
+//         historyElement.append('<span>' + moves[i] + ' ' + ( moves[i + 1] ? moves[i + 1] : ' ') + '</span><br>')
+//     }
+//     historyElement.scrollTop(historyElement[0].scrollHeight);
 
-};
+// };
 
 var onDrop = function (source, target) {
 
@@ -260,7 +260,7 @@ var onDrop = function (source, target) {
     $('#board').find('.square-' + source).addClass('highlight-white')
     $('#board').find('.square-' + target).addClass('highlight-white')
     // console.log(`source = ${source}`);
-    renderMoveHistory(game.history());
+    // renderMoveHistory(game.history());
 
     $('#board').find('.square-' + source).addClass('highlight-white')
     $('#board').find('.square-' + target).addClass('highlight-white')

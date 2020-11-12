@@ -1,38 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="static/js/chessboardjs/css/chessboard-0.3.0.css">
-    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <title>King Chess</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" />
+    <link rel="icon" type="image/png" href="./images/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="./static/js/chessboardjs/css/chessboard-0.3.0.css">
+    <link rel="stylesheet" type="text/css" href="./static/css/style.css">
 </head>
-<body>
-<div id="board" class="board"></div>
-<div class="info">
-    Search depth:
-    <select id="search-depth">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-    </select>
 
-    <br>
-    <span>Positions evaluated: <span id="position-count"></span></span>
-    <br>
-    <span>Time: <span id="time"></span></span>
-    <br>
-    <span>Positions/s: <span id="positions-per-s"></span> </span>
-    <br>
-    <br>
-    <div id="move-history" class="move-history">
+<body class="bg">
+    <div id="board" class="board" style="width:30% ;"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <div class="info" style="color: yellow; font-size: larger;">
+                    Search depth:
+                    <select id="search-depth">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3" selected>3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="row">
+                    <h1 class='txtdeepshadow'><b style="color: yellow;">King</b> <b>Chess</b></h1>
+                </div>
+            </div>
+            <div class="col-sm">
+                <form action="./">
+                    <button class="punch" type="submit"><i class="fas fa-arrow-left"></i> Back</button>
+                </form>
+            </div>
+
+        </div>
     </div>
-</div>
-<script src="static/js/jquery/jquery-3.2.1.min.js"></script>
-<script src="static/js/chessboardjs/js/chess.js"></script>
-<script src="static/js/chessboardjs/js/chessboard-0.3.0.js"></script>
-<script type="module" src="static/js/minimax/minimax.js"></script>
-<script>
-</script>
+    </div>
+    <div style="display: none;">
+        <audio autoplay="" controls="" loop="" preload="">
+            <source src="./images/1.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+    <script src="./static/js/jquery/jquery-3.2.1.min.js"></script>
+    <script src="./static/js/chessboardjs/js/chess.js"></script>
+    <script src="./static/js/chessboardjs/js/chessboard-0.3.0.js"></script>
+    <script type="module" src="./static/js/minimax/minimax.js"></script>
+
 </body>
+
 </html>
