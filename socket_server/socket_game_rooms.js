@@ -2,19 +2,47 @@
 socket_game_rooms = (online, indexRouter, arrayRooms) =>{
 var colorGo = "den";
 online.on(`connection`, function(socket){
-  let roomName = indexRouter.roomName
-  let rooms = online.adapter.rooms[roomName];
 
-  socket.on('disconnecting',reason=>{
-    for(var i = arrayRooms.length - 1; i >= 0 ; i--){
-      if(arrayRooms[i].name == roomName){
-        arrayRooms[i].size -= 1
-        if(arrayRooms[i].size == 0) arrayRooms.splice(i,1)
-        else online.to(roomName).emit("server-reset-player");
+    let roomName = indexRouter.roomName
+
+  socket.on('disconnecting', (reason) => {
+    let rooms = Object.keys(socket.rooms);
+    console.log("disconnecting: ", rooms);
+  });
+
+
+
+
+  socket.on(`disconnect`, (reason) => {
+    if(reason == "transport close"){
+      for(var i = arrayRooms.length - 1; i >= 0 ; i--){
+        if(arrayRooms[i].name == roomName){
+          arrayRooms[i].size -= 1
+          if(arrayRooms[i].size == 0) arrayRooms.splice(i,1)
+          else online.to(roomName).emit("server-reset-player");
+        }
       }
     }
-    // online.to(roomName).emit("server-send-color");
+    if(reason == "transport error"){
+      online.to(roomName).emit("server-sent-player-transport-error");
+    }
+    if(reason == "ping timeout"){
+      for(var i = arrayRooms.length - 1; i >= 0 ; i--){
+        if(arrayRooms[i].name == roomName){
+          arrayRooms[i].size -= 1
+          if(arrayRooms[i].size == 0) arrayRooms.splice(i,1)
+          else online.to(roomName).emit("server-reset-player");
+        }
+      }
+    }
+    console.log("Reson  -  "+reason);
   })
+
+  socket.on('error', (error) => {
+    console.log("error: "+error);
+  });
+
+  let rooms = online.adapter.rooms[roomName];
 
   if(rooms == undefined || rooms.length < 2){
     socket.join(roomName);
@@ -23,6 +51,7 @@ online.on(`connection`, function(socket){
     }
     else{
       online.to(roomName).emit("server-send-color","b");
+      // setTimeout(() => socket.disconnect(true), 5000);
     }
     socket.on("client-send-data", data=>{
       online.to(roomName).emit("server-send-data", data);

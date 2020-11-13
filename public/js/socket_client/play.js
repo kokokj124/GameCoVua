@@ -5,7 +5,36 @@ var squareToHighlight = null
 var squareClass = 'square-55d63'
 
 // var socket = io("https://vu-nam.herokuapp.com/online/online-rooms")
-var socket = io("127.0.0.1:3000/online/online-rooms")
+var socket = io.connect("127.0.0.1:3000/online/online-rooms",{
+  reconnection: true,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax : 1000,
+  reconnectionAttempts: 2
+})
+
+// socket.on('disconnect', (reason) => {
+//   if (reason === 'io server disconnect') {
+//     // the disconnection was initiated by the server, you need to reconnect manually
+//     socket.connect();
+//   }
+//   // else the socket will automatically try to reconnect
+// });
+
+socket.on("reconnect_failed",()=>{
+  window.location.href = "/online/online-rooms";
+})
+
+socket.on("reconnecting",()=>{
+  alert("reconnecting...")
+})
+
+socket.on("reconnect",()=>{
+  alert("reconnect active...")
+})
+
+socket.on("server-sent-player-transport-error",()=>{
+  alert("người chơi bên kia mất kết nối")
+});
 
 function removeHighlights(color) {
   $board.find('.' + squareClass)
@@ -71,7 +100,6 @@ socket.on("server-send-data", data=>{
 })
 
 socket.on("server-send-colorGo",data=>{
-  console.log(data);
   $("#colorGo").html("<b> Mau " + data +" di </b>");
 })
 function onDrop(source, target) {

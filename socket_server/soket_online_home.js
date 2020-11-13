@@ -28,6 +28,7 @@ socket_online_home = (online, arrayRooms) => {
               flag = true
               // online.emit('server-set-color', data)
               socket.emit('server-check-rooms',"allow")
+              online.emit('server-send-list-rooms', { arrayRooms: arrayRooms });
             }
           });
           if(flag == false)
