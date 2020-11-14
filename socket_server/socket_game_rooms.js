@@ -66,7 +66,7 @@ online.on(`connection`, function(socket){
 
   socket.on("client-send-data", data=>{
     online.to(roomName).emit("server-send-data", data);
-    })
+  })
 
 })
 }
