@@ -6,7 +6,7 @@ socket.on('server-send-list-rooms',data =>{
     if(data.arrayRooms != "error"){
         $("#room").html("")
         data.arrayRooms.forEach(room=>{
-            if(room.size == 2){
+            if(room.users.length == 2){
                 $("#room").append("<option id="+room.name+" value="+room.name+">"+"<div>" + room.name + "</div>" + "<div> ( Đầy )</div>" + "</option>")
                 $('#'+room.name).attr("style", "background-color: coral");
             }
@@ -21,7 +21,7 @@ socket.on('server-send-list-rooms',data =>{
 })
 
 socket.on('server-accset-rooms', ()=>{
-    window.location.href = "/online/online-rooms?roomName=" + $("#room").val();
+    window.location.href = "/online/online-rooms?roomName=" + $("#room-name").val();
 })
 
 $("#online-join-room").click(()=>{

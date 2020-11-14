@@ -12,14 +12,6 @@ var socket = io.connect("127.0.0.1:3000/online/online-rooms",{
   reconnectionAttempts: 2
 })
 
-// socket.on('disconnect', (reason) => {
-//   if (reason === 'io server disconnect') {
-//     // the disconnection was initiated by the server, you need to reconnect manually
-//     socket.connect();
-//   }
-//   // else the socket will automatically try to reconnect
-// });
-
 socket.on("reconnect_failed",()=>{
   window.location.href = "/online/online-rooms";
 })
@@ -69,38 +61,44 @@ var onMouseoverSquare = function (square, piece) {
     greySquare(moves[i].to);
   }
 };
-
+var countDown = {valueBlack:600, valueWhite:600};
+var minutes, seconds
+var times
 socket.on("server-send-data", data=>{
   var move = game.move({
-    from: data.from,
-    to: data.to,
+    from: data.move.from,
+    to: data.move.to,
     promotion: 'q' // NOTE: always promote to a queen for example simplicity
   })
-
-  // console.log("aa = " + data.from);
-
-  // illegal move
+  clearInterval(times);
+  console.log(data.countDown);
+  countDown = data.countDown;
+  console.log(countDown);
+  if(data.move.color == 'w'){
+    $("#colorGo").html("<b style='color: white'> Mau " + "Black" +" di </b>");
+    timeOut(data.countDown, "timeBlack")
+  }
+  else{
+    $("#colorGo").html("<b style='color: white'> Mau " + "White" +" di </b>");
+    timeOut(data.countDown, "timeWhite")
+  }
   if (move === null) return 'snapback'
   if (move.color === 'w') {
     removeHighlights('white')
-    $board.find('.square-' + data.from).addClass('highlight-white')
-    $board.find('.square-' + data.to).addClass('highlight-white')
+    $board.find('.square-' + data.move.from).addClass('highlight-white')
+    $board.find('.square-' + data.move.to).addClass('highlight-white')
     if (game.in_checkmate()) {
       status = 'Game over, White is in checkmate.'
     }
   } else {
     removeHighlights('black')
-    $board.find('.square-' + data.from).addClass('highlight-black')
-    $board.find('.square-' + data.to).addClass('highlight-black')
+    $board.find('.square-' + data.move.from).addClass('highlight-black')
+    $board.find('.square-' + data.move.to).addClass('highlight-black')
     if (game.in_checkmate()) {
       status = 'Game over, Black is in checkmate.'
     }
   }
   onSnapEnd();
-})
-
-socket.on("server-send-colorGo",data=>{
-  $("#colorGo").html("<b> Mau " + data +" di </b>");
 })
 function onDrop(source, target) {
   // see if the move is legal
@@ -127,9 +125,7 @@ function onDrop(source, target) {
       status = 'Game over, Black is in checkmate.'
     }
   }
-
-  socket.emit("client-send-data",move);
-  
+  socket.emit("client-send-data",{move:move, countDown:countDown});
 }
 
 function onMoveEnd() {
@@ -182,6 +178,7 @@ var greySquare = function (square) {
 var config = {
   draggable: true,
   position: 'start',
+  orientation: 'black',
   onDragStart: onDragStart,
   onDrop: onDrop,
   onMoveEnd: onMoveEnd,
@@ -190,21 +187,42 @@ var config = {
   onMouseoverSquare: onMouseoverSquare,
 }
 board = ChessBoard('board', config)
-var color
 
 socket.on("server-reset-player", ()=>{
   board.orientation('black')
+  $("#colorGo").html("<b style='color: white'> Mau " + "White" +" di </b>");
   game.reset()
   board.start()
 })
 
 socket.on("server-send-color",data=>{
-  if(data == 'b'){
-    board.flip()
-    color = 'b'
+  console.log(data);
+  if(data == 'w'){
+    board.orientation('white')
   }
   else{
-    board.flip()
-    color = 'w'
+    board.orientation('black')
   }
 })
+
+function timeOut(countDown, color) {
+    times = setInterval(function() {
+    if(color == "timeWhite"){
+      countDown.valueWhite -= 1;
+      minutes = Math.floor(countDown.valueWhite / 60);
+      seconds = countDown.valueWhite - minutes * 60;
+      document.getElementById("timeWhite").innerHTML = minutes + ":" + seconds;
+    }
+    else{
+      countDown.valueBlack -= 1;
+      minutes = Math.floor(countDown.valueBlack / 60);
+      seconds = countDown.valueBlack - minutes * 60;
+      document.getElementById("timeBlack").innerHTML = minutes + ":" + seconds;
+    }
+    if(countDown.valueWhite == 0 || countDown.valueBlack == 0){
+      clearInterval(times);
+      if(countDown.valueWhite == 0) alert('Game over, Black is in checkmate.')
+      else alert('Game over, White is in checkmate.')
+    }
+  }, 1000);
+} 

@@ -1,36 +1,40 @@
 
 socket_game_rooms = (online, indexRouter, arrayRooms) =>{
-var colorGo = "den";
 online.on(`connection`, function(socket){
 
-    let roomName = indexRouter.roomName
+  let roomName = indexRouter.roomName
 
-  socket.on('disconnecting', (reason) => {
-    let rooms = Object.keys(socket.rooms);
-    console.log("disconnecting: ", rooms);
-  });
-
-
+  // socket.on('disconnecting', (reason) => {
+  //     // var roster = online.sockets.clients(roomName);
+  //     // let rooms = Object.keys(socket.rooms);
+  //     // console.log("disconnecting: ", rooms);
+  // });
 
 
   socket.on(`disconnect`, (reason) => {
     if(reason == "transport close"){
       for(var i = arrayRooms.length - 1; i >= 0 ; i--){
         if(arrayRooms[i].name == roomName){
-          arrayRooms[i].size -= 1
-          if(arrayRooms[i].size == 0) arrayRooms.splice(i,1)
+          arrayRooms[i].users.pop()
+          indexSocketID = arrayRooms[i].socketId.indexOf(socket.id)
+          if(indexSocketID > -1) arrayRooms[i].socketId.splice(indexSocketID, 1)
+          if(arrayRooms[i].users.length == 0){
+            arrayRooms.splice(i,1)
+          }
           else online.to(roomName).emit("server-reset-player");
         }
       }
     }
+
     if(reason == "transport error"){
       online.to(roomName).emit("server-sent-player-transport-error");
     }
+
     if(reason == "ping timeout"){
       for(var i = arrayRooms.length - 1; i >= 0 ; i--){
         if(arrayRooms[i].name == roomName){
-          arrayRooms[i].size -= 1
-          if(arrayRooms[i].size == 0) arrayRooms.splice(i,1)
+          arrayRooms[i].users.splice(arrayRooms[i].users.length,1)
+          if(arrayRooms[i].users.length == 0) arrayRooms.splice(i,1)
           else online.to(roomName).emit("server-reset-player");
         }
       }
@@ -46,25 +50,24 @@ online.on(`connection`, function(socket){
 
   if(rooms == undefined || rooms.length < 2){
     socket.join(roomName);
-    if(rooms == undefined){
-      online.to(roomName).emit("server-send-color","w");
-    }
-    else{
-      online.to(roomName).emit("server-send-color","b");
-      // setTimeout(() => socket.disconnect(true), 5000);
-    }
-    socket.on("client-send-data", data=>{
-      online.to(roomName).emit("server-send-data", data);
-      if( colorGo == "trang"){
-        online.to(roomName).emit("server-send-colorGo", colorGo);
-        colorGo = "den"
+    for(var i = arrayRooms.length - 1; i >= 0 ; i--){
+      if(arrayRooms[i].name == roomName && arrayRooms[i].users.length <= 2){
+        arrayRooms[i].socketId.push(socket.id)
       }
-      else{
-        online.to(roomName).emit("server-send-colorGo", colorGo);
-        colorGo = "trang"
-      }
-      })
+    }
   }
+
+  for(var i = arrayRooms.length - 1; i >= 0 ; i--){
+    if(arrayRooms[i].name == roomName && arrayRooms[i].users.length == 2){
+      online.to(arrayRooms[i].socketId[0]).emit("server-send-color","b");
+      online.to(arrayRooms[i].socketId[1]).emit("server-send-color","w");
+    }
+  }
+
+  socket.on("client-send-data", data=>{
+    online.to(roomName).emit("server-send-data", data);
+    })
+
 })
 }
 module.exports = socket_game_rooms

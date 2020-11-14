@@ -25,4 +25,13 @@ router.get('/online/online-rooms', function(req, res, next) {
   res.render('online_rooms.ejs');
 });
 
+router.get('/online/online-rooms', function(req, res, next) {
+  router.roomName = req.query.roomName;
+  res.render('online_rooms.ejs');
+});
+
+router.get('/wating', function(req, res, next) {
+  res.render('wating.ejs');
+});
+
 module.exports = router;

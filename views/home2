@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="../static/js/chessboardjs/css/chessboard-0.3.0.css">
+<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<title>King Chess</title>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" />
+<link rel="icon" type="image/png" href="../images/favicon.png" />
+</head>
+</head>
+
+<body class="bg">
+  <div id="board" class="board" style="width:30% ;"></div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <div class="row">
+          <h1 class='txtdeepshadow'><b style="color: yellow;">King</b> <b>Chess</b></h1>
+        </div>
+      </div>
+      <div class="col-sm">
+        <form action="../online-home">
+          <button class="punch" type="submit"><i class="fas fa-arrow-left"></i> Back</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="../static/js/chessboardjs/js/chess.js"></script>
+  <script src="../static/js/chessboardjs/js/chessboard-0.3.0.js"></script>
+  <script type="module" src="../static/js/socket_client/play.js"></script>
+  <b id="colorGo" style="color: white;">Mau Trang di</b>
+  </div>
+</body>
+
+</html>
