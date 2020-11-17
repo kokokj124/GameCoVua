@@ -1,7 +1,5 @@
 var socket = io("127.0.0.1:3000/online-home")
 // var socket = io("https://vu-nam.herokuapp.com/online-home")
-
-
 socket.on('server-send-list-rooms',data =>{
     if(data.arrayRooms != "error"){
         $("#room").html("")
@@ -22,10 +20,20 @@ socket.on('server-send-list-rooms',data =>{
 
 socket.on('server-accset-rooms', ()=>{
     window.location.href = "/online/online-rooms?roomName=" + $("#room-name").val();
+
+    // var req = new XMLHttpRequest();
+    // req.open("GET", "./online/online-rooms", false);
+    // req.setRequestHeader("room_name", $("#room-name").val());
+    // req.send(null)
+    
+    // $.ajax({
+    //     type: "GET",
+    //     url: '../online/online-rooms',
+    //     headers: { 'room_name':  $("#room-name").val()}
+    // });
 })
 
 $("#online-join-room").click(()=>{
-    console.log($("#room").val());
     socket.emit('client-check-rooms', $("#room").val())
     socket.on('server-check-rooms', data=>{
         if(data == "error"){
@@ -33,6 +41,11 @@ $("#online-join-room").click(()=>{
         }
         else{
             window.location.href = "online/online-rooms?roomName=" + $("#room").val();
+            // $.ajax({
+            //     type: "GET",
+            //     url: '../online/online-rooms',
+            //     headers: { 'room_name':  $("#room-name").val()}
+            // });
         }
     })
 })
