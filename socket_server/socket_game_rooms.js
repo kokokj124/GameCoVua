@@ -2,12 +2,7 @@
 socket_game_rooms = (online, indexRouter, arrayRooms) => {
   online.on(`connection`, function (socket) {
     let roomName = indexRouter.roomName
-
-    // socket.on('disconnecting', (reason) => {
-    //     // var roster = online.sockets.clients(roomName);
-    //     // let rooms = Object.keys(socket.rooms);
-    //     // console.log("disconnecting: ", rooms);
-    // });
+    console.log(arrayRooms);
 
     socket.on(`disconnect`, (reason) => {
       if (reason == "transport close") {

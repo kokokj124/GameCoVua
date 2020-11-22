@@ -53,3 +53,5 @@ $("#online-join-room").click(()=>{
 $("#btn-online-creat").click(()=>{
     socket.emit("client-create-rooms", $("#room-name").val());
 })
+
+$("#player-now").click(()=>{socket.emit("client-click-playnow");})
