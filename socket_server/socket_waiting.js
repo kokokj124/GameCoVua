@@ -7,8 +7,7 @@ socket_waiting = (online, arrayRooms) => {
         if (rooms == undefined || rooms.length < 2) {
             socket.join(randomRoom);
             if (rooms == undefined) {
-                console.log("undefined");
-                let room = { name: randomRoom, users: ["w"], sate: "none", socketId: [] }
+                let room = { name:randomRoom, users:["w"], sate:"none", socketId:[] }
                 arrayRooms.push(room)
             }
             else{

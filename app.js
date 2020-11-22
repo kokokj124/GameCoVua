@@ -10,6 +10,7 @@ var app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 var arrayRooms = [];
+var arrayRooms2 = [];
 
 app.use("/static", express.static(path.join(__dirname, `public`)));
 app.use("/images", express.static(path.join(__dirname, `public`, `images`)));
@@ -26,6 +27,7 @@ socket_online_rooms(online_rooms, indexRouter, arrayRooms)
 
 const wating  = io.of('/wating')
 socket_wating(wating, arrayRooms)
+// socket_online_rooms(online_rooms, indexRouter, arrayRooms)
 
 var port = process.env.PORT || 3000
 server.listen(port, () => {
