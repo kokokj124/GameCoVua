@@ -10,7 +10,6 @@ var app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 var arrayRooms = [];
-var arrayRooms2 = [];
 
 app.use("/static", express.static(path.join(__dirname, `public`)));
 app.use("/images", express.static(path.join(__dirname, `public`, `images`)));
