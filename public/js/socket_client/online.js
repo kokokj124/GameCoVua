@@ -1,33 +1,51 @@
-// var socket = io("127.0.0.1:3000/online-home")
-var socket = io("https://vu-nam.herokuapp.com/online-home")
-
-
+var socket = io("127.0.0.1:3000/online-home")
+// var socket = io("https://vu-nam.herokuapp.com/online-home")
 socket.on('server-send-list-rooms',data =>{
     if(data.arrayRooms != "error"){
         $("#room").html("")
         data.arrayRooms.forEach(room=>{
-            $("#room").append("<option id="+room.name+">"+room.name+"</option>")
-            if(room.size == 2){
+            if(room.users.length == 2){
+                $("#room").append("<option id="+room.name+" value="+room.name+">"+"<div>" + room.name + "</div>" + "<div> ( Đầy )</div>" + "</option>")
                 $('#'+room.name).attr("style", "background-color: coral");
             }
+            else{
+                $("#room").append("<option id="+room.name+" value="+room.name+">"+"<div>" + room.name + "</div>" + "<div> ( Còn Trống )</div>" + "</option>")
+            }
         })
-        if(data.stateRooms == true){
-            window.location.href = "/online/online-rooms?roomName=" + $("#room-name").val()
-        }
     }
     else {
         alert("Phong Da Ton Tai")
     }
 })
 
+socket.on('server-accset-rooms', ()=>{
+    window.location.href = "/online/online-rooms?roomName=" + $("#room-name").val();
+
+    // var req = new XMLHttpRequest();
+    // req.open("GET", "./online/online-rooms", false);
+    // req.setRequestHeader("room_name", $("#room-name").val());
+    // req.send(null)
+    
+    // $.ajax({
+    //     type: "GET",
+    //     url: '../online/online-rooms',
+    //     headers: { 'room_name':  $("#room-name").val()}
+    // });
+})
+
 $("#online-join-room").click(()=>{
     socket.emit('client-check-rooms', $("#room").val())
-    socket.on('server-check-rooms',data=>{
+    socket.on('server-check-rooms', data=>{
         if(data == "error"){
             alert("Phong Da Day")
         }
         else{
             window.location.href = "online/online-rooms?roomName=" + $("#room").val();
+            // $.ajax({
+            //     type: "GET",
+            //     url: '../online/online-rooms',
+            //     headers: { 'room_name':  $("#room-name").val()}
+            // });
         }
     })
 })
@@ -35,3 +53,5 @@ $("#online-join-room").click(()=>{
 $("#btn-online-creat").click(()=>{
     socket.emit("client-create-rooms", $("#room-name").val());
 })
+
+$("#player-now").click(()=>{socket.emit("client-click-playnow");})

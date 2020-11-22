@@ -4,6 +4,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var socket_online_home = require('./socket_server/soket_online_home')
 var socket_online_rooms = require('./socket_server/socket_game_rooms')
+var socket_wating = require('./socket_server/socket_waiting')
+// var socket_online_rooms_random = require('./socket_server/socket_game_rooms_random')
 var app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
@@ -20,9 +22,11 @@ const online = io.of('/online-home')
 socket_online_home(online, arrayRooms)
 
 const online_rooms = io.of('/online/online-rooms')
-// const online_rooms = io.of('/online-home')
-
 socket_online_rooms(online_rooms, indexRouter, arrayRooms)
+
+const wating  = io.of('/wating')
+socket_wating(wating, arrayRooms)
+// socket_online_rooms(online_rooms, indexRouter, arrayRooms)
 
 var port = process.env.PORT || 3000
 server.listen(port, () => {
